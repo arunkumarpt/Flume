@@ -85,12 +85,43 @@ agent.channels.c1.dataDirs=/flume/c1/data
 
 Be sure to set HADOOP_PREFIX and JAVA_HOME environment variables when using the file channel. While we seemingly haven't used anything Hadoop-specific (such as writing to HDFS), the file channel uses Hadoop Writables as an on-disk serialization format. If Flume can't find the Hadoop libraries, you might see this in your startup, so check your environment variables:
 
+```
 java.lang.NoClassDefFoundError: org/apache/hadoop/io/Writable
+```
 
 ## Splillable memory channels
 
 Introduced in Flume 1.5, the Spillable Memory Channel is a channel that acts like a memory channel until it is full. At that point, it acts like a file channel that is configured with a much larger capacity than its memory counterpart but runs at the speed of your disks 
 
 ##Sinks and Sink Processors
+
+```
+agent.sinks.k1.type=hdfs
+agent.sinks.k1.hdfs.path=/path/in/hdfs
+```
+
+##Sink groups
+In order to remove single points of failures in your data processing pipeline, Flume has the ability to send events to different sinks using either load balancing or failover. In order to do this, we need to introduce a new concept called a sink group. A sink group is used to create a logical grouping of sinks. The behavior of this grouping is dictated by something called the sink processor, which determines how events are routed.
+
+Load balancing, Failover.
+
+##MorphlineSolrSink
+
+##ElasticSearchSink
+
+##Interceptors, ETL, and Routing
+
+```
+public Event intercept(Event event);
+agent.sources.s1.interceptors=i1 i2 i3
+agent.sources.s1.interceptors.i1.type=TYPE1
+agent.sources.s1.interceptors.i1.additionalProperty1=VALUE
+agent.sources.s1.interceptors.i2.type=TYPE2
+agent.sources.s1.interceptors.i3.type=TYPE3
+```
+Timestamp, Host, Static,Regular expression filtering, Morphline interceptor.
+
+## A typical Use Case 
+### Log Analysis using flume -> elastic search -> Kibana
 
 HDFS sink
